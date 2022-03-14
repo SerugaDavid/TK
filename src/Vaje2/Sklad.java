@@ -30,4 +30,18 @@ public class Sklad<Tip> {
         this.vrh = this.vrh.naslednji;
         return tmp;
     }
+
+    public Tip top() {
+        return this.vrh.vrednost;
+    }
+
+    public int size() {
+        Element tmp = this.vrh;
+        int count = 0;
+        while (tmp != null) {
+            count++;
+            tmp = tmp.naslednji;
+        }
+        return count;
+    }
 }
