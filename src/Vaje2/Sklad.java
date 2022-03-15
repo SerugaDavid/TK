@@ -32,6 +32,8 @@ public class Sklad<Tip> {
     }
 
     public Tip top() {
+        if (this.vrh == null)
+            throw new NoSuchElementException();
         return this.vrh.vrednost;
     }
 
