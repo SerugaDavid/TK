@@ -46,4 +46,8 @@ public class Sklad<Tip> {
         }
         return count;
     }
+
+    public boolean isEmpty() {
+        return this.size() == 0;
+    }
 }
