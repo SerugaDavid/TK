@@ -1,4 +1,4 @@
-package Vaje2;
+package Izziv3;
 
 import org.junit.jupiter.api.Test;
 
