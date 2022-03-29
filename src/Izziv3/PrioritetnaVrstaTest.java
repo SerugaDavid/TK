@@ -69,7 +69,6 @@ class PrioritetnaVrstaTest {
         pv.add("Test2");
         pv.add("Test4");
         pv.add("Test3");
-        System.out.println("----------");
         assertEquals("Test5", pv.removeFirst());
         assertEquals("Test4", pv.removeFirst());
         assertEquals("Test3", pv.removeFirst());

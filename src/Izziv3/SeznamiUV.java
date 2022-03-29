@@ -71,6 +71,7 @@ public class SeznamiUV {
                 while (!tmpSklad.isEmpty())
                     this.sklad.add(tmpSklad.removeFirst());
                 return "-1";
+                // prioritetna vrsta
             case "pq_add": // brez elementov z več nizi “"
                 if (sc.hasNext()) {
                     String val = sc.next();
