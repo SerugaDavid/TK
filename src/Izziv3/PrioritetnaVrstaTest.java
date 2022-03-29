@@ -37,7 +37,6 @@ class PrioritetnaVrstaTest {
         pv.add("Test2");
     }
 
-    @Disabled("To be implemented later...")
     @Test
     void testAddOverflow() {
         pv = new PrioritetnaVrsta<>(2);
@@ -48,7 +47,6 @@ class PrioritetnaVrstaTest {
 
     // testi brisanja
 
-    //@Test(expected=java.util.NoSuchElementException.class)
     @Test
     void testRemoveFirstEmpty() {
         NoSuchElementException thrown = assertThrows(
@@ -67,31 +65,20 @@ class PrioritetnaVrstaTest {
     @Test
     void testRemoveFirstMultiple() {
         pv.add("Test1");
-        pv.printTree();
         pv.add("Test5");
-        pv.printTree();
         pv.add("Test2");
-        pv.printTree();
         pv.add("Test4");
-        pv.printTree();
         pv.add("Test3");
-        pv.printTree();
         System.out.println("----------");
         assertEquals("Test5", pv.removeFirst());
-        pv.printTree();
         assertEquals("Test4", pv.removeFirst());
-        pv.printTree();
         assertEquals("Test3", pv.removeFirst());
-        pv.printTree();
         assertEquals("Test2", pv.removeFirst());
-        pv.printTree();
         assertEquals("Test1", pv.removeFirst());
-        pv.printTree();
     }
 
     // metoda get
 
-    //@Test(expected=java.util.NoSuchElementException.class)
     @Test
     void testGetFirstEmpty() {
         NoSuchElementException thrown = assertThrows(

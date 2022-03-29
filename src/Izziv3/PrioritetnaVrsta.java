@@ -1,6 +1,7 @@
 package Izziv3;
 
 public class PrioritetnaVrsta<Tip extends Comparable> implements Seznam<Tip> {
+
     private Object[] heap;
     private int end = 0;
 
@@ -13,43 +14,61 @@ public class PrioritetnaVrsta<Tip extends Comparable> implements Seznam<Tip> {
         this.heap[b] = tmp;
     }
 
-    private void bubbleUp() {
-        int eltIdx = this.end - 1;
-        while (eltIdx >= 0) {
-            Tip elt = (Tip) this.heap[eltIdx];
-            int childIdx = eltIdx * 2 + 1;
-            if (childIdx < this.end) {
-                Tip child = (Tip) this.heap[childIdx];
-                if (childIdx + 1 < this.end && child.compareTo(this.heap[childIdx+1]) < 0)
-                    child = (Tip) this.heap[++childIdx];
-                if (elt.compareTo(child) >= 0)
-                    return;
-                this.swap(eltIdx, childIdx);
-            }
-            eltIdx = eltIdx % 2 == 1 ? (eltIdx - 1) / 2 : (eltIdx - 2) / 2;
+    private void bubbleUp(int index) {
+        if (index == 0) return;
+        int parentIdx = (index - 1) / 2;
+        Tip element = (Tip) this.heap[index];
+        Tip parent = (Tip) this.heap[parentIdx];
+        if (element.compareTo(parent) > 0) {
+            this.swap(index, parentIdx);
+            this.bubbleUp(parentIdx);
         }
-    }
-    @Override
-    public void add (Tip e) {
-        this.heap[this.end++] = e;
-        this.bubbleUp();
     }
 
-    private void bubbleDown(int start) {
-        int eltIdx = start;
-        int childIdx = eltIdx * 2 + 1;
-        while (childIdx <= this.end) {
-            Tip elt = (Tip) this.heap[eltIdx];
-            Tip child = (Tip) this.heap[childIdx];
-            if (childIdx + 1 < this.end && child.compareTo(this.heap[childIdx+1]) < 0)
-                child = (Tip) this.heap[++childIdx];
-            if (elt.compareTo(child) >= 0)
-                return;
-            this.swap(eltIdx, childIdx);
-            eltIdx = childIdx;
-            childIdx = eltIdx * 2 + 1;
+    private void ensureCapacity() {
+        if (this.end == this.heap.length) {
+            Object[] tmp = new Object[this.heap.length * 2];
+            System.arraycopy(this.heap, 0, tmp, 0, this.heap.length);
+            this.heap = tmp;
         }
     }
+
+    @Override
+    public void add (Tip e) {
+        this.ensureCapacity();
+        this.heap[this.end++] = e;
+        this.bubbleUp(this.end - 1);
+    }
+
+    private int[] getChildren(int index) {
+        int[] children = new int[2];
+        children[0] = index * 2 + 1;
+        children[1] = index * 2 + 2;
+        return children;
+    }
+
+    private boolean hasBothChildren(int index) {
+        return this.getChildren(index)[1] < this.end;
+    }
+
+    private void bubbleDown(int index) {
+        if (index >= this.end) return;
+        int[] children = this.getChildren(index);
+        Tip elt = (Tip) this.heap[index];
+        if (children[0] < this.end) {
+            Tip child = (Tip) this.heap[children[0]];
+            int indexOfChild = children[0];
+            if (this.hasBothChildren(index) && child.compareTo((Tip)this.heap[children[1]]) < 0) {
+                child = (Tip) this.heap[children[1]];
+                indexOfChild = children[1];
+            }
+            if (elt.compareTo(child) < 0) {
+                this.swap(index, children[0]);
+                bubbleDown(indexOfChild);
+            }
+        }
+    }
+
     @Override
     public Tip removeFirst() {
         if (this.isEmpty())
@@ -85,9 +104,10 @@ public class PrioritetnaVrsta<Tip extends Comparable> implements Seznam<Tip> {
     }
 
     public void printTree() {
-        for (int i = 0; i < this.end; i++) {
-            System.out.println(this.heap[i].toString());
+        System.out.println("Heap:");
+        for(int i = 0; i < this.end; i++) {
+            System.out.print(this.heap[i] + " ");
         }
-        System.out.println("---");
+        System.out.println();
     }
 }
