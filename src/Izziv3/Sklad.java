@@ -2,7 +2,7 @@ package Izziv3;
 
 import java.util.NoSuchElementException;
 
-public class Sklad<Tip> {
+public class Sklad<Tip> implements Seznam<Tip> {
     private Element<Tip> vrh;
 
     class Element<Tip> {
@@ -19,11 +19,11 @@ public class Sklad<Tip> {
         this.vrh = null;
     }
 
-    public void push(Tip vrednost) {
+    private void push(Tip vrednost) {
         this.vrh = new Element<>(vrednost, this.vrh);
     }
 
-    public Tip pop() {
+    private Tip pop() {
         if (this.vrh == null)
             throw new NoSuchElementException();
         Tip tmp = this.vrh.vrednost;
@@ -31,12 +31,28 @@ public class Sklad<Tip> {
         return tmp;
     }
 
-    public Tip top() {
+    private Tip top() {
         if (this.vrh == null)
             throw new NoSuchElementException();
         return this.vrh.vrednost;
     }
 
+    @Override
+    public void add(Tip e) {
+        this.push(e);
+    }
+
+    @Override
+    public Tip removeFirst() {
+        return this.pop();
+    }
+
+    @Override
+    public Tip getFirst() {
+        return this.top();
+    }
+
+    @Override
     public int size() {
         Element tmp = this.vrh;
         int count = 0;
@@ -47,6 +63,12 @@ public class Sklad<Tip> {
         return count;
     }
 
+    @Override
+    public int depth() {
+        return this.size();
+    }
+
+    @Override
     public boolean isEmpty() {
         return this.size() == 0;
     }

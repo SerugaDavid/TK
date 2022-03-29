@@ -7,108 +7,108 @@ import static org.junit.jupiter.api.Assertions.*;
 class SkladTest {
 
     @Test
-    void push1() {
+    void add1() {
         Sklad<Integer> instance = new Sklad<>();
-        instance.push(15);
+        instance.add(15);
     }
     @Test
-    void push2() {
+    void add2() {
         Sklad<Integer> instance = new Sklad<>();
         for (int i = 0; i < 10; i++) {
-            instance.push(i);
+            instance.add(i);
         }
     }
     @Test
-    void push3() {
+    void add3() {
         Sklad<Integer> instance = new Sklad<>();
-        instance.push(-10);
+        instance.add(-10);
     }
     @Test
-    void push4() {
+    void add4() {
         Sklad<Integer> instance = new Sklad<>();
-        instance.push(null);
+        instance.add(null);
     }
 
     @Test
-    void pop1() {
+    void removeFirst1() {
         Sklad<Integer> instance = new Sklad<>();
-        instance.push(15);
-        assert instance.pop() == 15;
+        instance.add(15);
+        assert instance.removeFirst() == 15;
     }
     @Test
-    void pop2() {
+    void removeFirst2() {
         Sklad<Integer> instance = new Sklad<>();
         for (int i = 0; i < 10; i++) {
-            instance.push(i);
+            instance.add(i);
         }
         for (int i = 9; i >= 0; i--) {
-            assert instance.pop() == i;
+            assert instance.removeFirst() == i;
         }
     }
     @Test
-    void pop3() {
+    void removeFirst3() {
         Sklad<Integer> instance = new Sklad<>();
         assertThrows(java.util.NoSuchElementException.class,
-                ()-> {instance.pop();});
+                ()-> {instance.removeFirst();});
     }
     @Test
-    void pop4() {
+    void removeFirst4() {
         Sklad<Integer> instance = new Sklad<>();
-        instance.push(15);
-        instance.push(10);
-        assert instance.pop() == 10;
-        assert instance.pop() == 15;
+        instance.add(15);
+        instance.add(10);
+        assert instance.removeFirst() == 10;
+        assert instance.removeFirst() == 15;
         assertThrows(java.util.NoSuchElementException.class,
-                ()-> {instance.pop();});
+                ()-> {instance.removeFirst();});
     }
 
     @Test
-    void top1() {
+    void getFirst1() {
         Sklad<Integer> instance = new Sklad<>();
-        instance.push(15);
-        instance.push(10);
-        assert instance.top() == 10;
+        instance.add(15);
+        instance.add(10);
+        assert instance.getFirst() == 10;
     }
     @Test
-    void top2() {
+    void getFirst2() {
         Sklad<Integer> instance = new Sklad<>();
         for (int i = 0; i < 10; i++) {
-            instance.push(i);
-            assert instance.top() == i;
+            instance.add(i);
+            assert instance.getFirst() == i;
         }
     }
     @Test
-    void top3() {
+    void getFirst3() {
         Sklad<Integer> instance = new Sklad<>();
         assertThrows(java.util.NoSuchElementException.class,
-                ()-> {instance.top();});
+                ()-> {instance.getFirst();});
     }
     @Test
-    void top4() {
+    void getFirst4() {
         Sklad<Integer> instance = new Sklad<>();
         for (int i = 0; i < 10; i++) {
-            instance.push(i);
-            assert instance.top() == i;
+            instance.add(i);
+            assert instance.getFirst() == i;
         }
         for (int i = 9; i >= 0; i--) {
-            assert instance.top() == i;
-            instance.pop();
+            assert instance.getFirst() == i;
+            instance.removeFirst();
         }
         assertThrows(java.util.NoSuchElementException.class,
-                ()-> {instance.top();});
+                ()-> {instance.getFirst();});
     }
 
     @Test
     void size1() {
         Sklad<Integer> instance = new Sklad<>();
-        instance.push(15);
+        instance.add(15);
         assert instance.size() == 1;
     }
     @Test
     void size2() {
         Sklad<Integer> instance = new Sklad<>();
         for (int i = 0; i < 10; i++) {
-            instance.push(i);
+            instance.add(i);
         }
         assert instance.size() == 10;
     }
@@ -122,10 +122,10 @@ class SkladTest {
         Sklad<Integer> instance = new Sklad<>();
         for (int i = 0; i < 10; i++) {
             assert instance.size() == i;
-            instance.push(i);
+            instance.add(i);
         }
         for (int i = 9; i >= 0; i--) {
-            instance.pop();
+            instance.removeFirst();
             assert instance.size() == i;
         }
         assert instance.size() == 0;
