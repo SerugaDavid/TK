@@ -1,5 +1,6 @@
 package Izziv3;
 
+import java.util.EmptyStackException;
 import java.util.NoSuchElementException;
 
 public class Sklad<Tip> implements Seznam<Tip> {
@@ -75,6 +76,8 @@ public class Sklad<Tip> implements Seznam<Tip> {
 
     @Override
     public Tip remove(Tip e) {
+        if (isEmpty())
+            throw new EmptyStackException();
         Sklad<Tip> tmp = new Sklad<>();
         Tip tmp2 = null;
         while (!this.isEmpty()) {
@@ -93,6 +96,8 @@ public class Sklad<Tip> implements Seznam<Tip> {
 
     @Override
     public boolean exists(Tip e) {
+        if (isEmpty())
+            throw new EmptyStackException();
         Sklad<Tip> tmp = new Sklad<>();
         Tip tmp2 = null;
         while (!this.isEmpty()) {

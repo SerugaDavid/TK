@@ -4,6 +4,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.EmptyStackException;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -189,6 +190,7 @@ class PrioritetnaVrstaTest {
         assertEquals("Test2", pv.getFirst());
         assertEquals("Test2", pv.remove("Test2"));
         assertEquals("Test1", pv.getFirst());
+        assertEquals(1, pv.size());
     }
 
     @Test
@@ -204,6 +206,7 @@ class PrioritetnaVrstaTest {
         pv.add("Test");
         pv.remove("Test");
         assertTrue(pv.isEmpty());
+        assertThrows(EmptyStackException.class, () -> pv.remove("Test1"));
     }
 
     @Test
@@ -214,7 +217,7 @@ class PrioritetnaVrstaTest {
         assertEquals("Test0", pv.remove("Test0"));
         assertEquals("Test2", pv.remove("Test2"));
         assertEquals("Test1", pv.removeFirst());
-        assertThrows(NoSuchElementException.class, () -> pv.remove("Test1"));
+        assertThrows(EmptyStackException.class, () -> pv.remove("Test1"));
     }
 
     @Test
@@ -239,7 +242,7 @@ class PrioritetnaVrstaTest {
 
     @Test
     void testExistsEmpty() {
-        assertFalse(pv.exists("Test"));
+        assertThrows(EmptyStackException.class, () -> pv.exists("Test1"));
     }
 
     @Test
@@ -248,9 +251,9 @@ class PrioritetnaVrstaTest {
             pv.add("Test" + i);
         }
         for (int i = 0; i < 3; i++) {
-            assertTrue(pv.exists("Test0"));
-            pv.removeFirst();
+            assertFalse(pv.exists("Test" + (i - 1)));
+            assertEquals("Test" + i, pv.remove("Test" + i));
         }
-        assertFalse(pv.exists("Test0"));
+        assertThrows(EmptyStackException.class, () -> pv.exists("Test1"));
     }
 }

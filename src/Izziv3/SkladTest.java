@@ -144,7 +144,7 @@ class SkladTest {
     }
     @Test
     void remove3() {
-        assertThrows(java.util.NoSuchElementException.class,
+        assertThrows(java.util.EmptyStackException.class,
                 ()-> {this.instance.remove(1);});
     }
     @Test
@@ -154,7 +154,6 @@ class SkladTest {
         }
         assert this.instance.remove(1) == 1;
         assert this.instance.remove(2) == 2;
-        assert this.instance.remove(0) == 0;
         assertThrows(java.util.NoSuchElementException.class,
                 ()-> {this.instance.remove(3);});
     }
@@ -177,9 +176,10 @@ class SkladTest {
     }
     @Test
     void exists3() {
-        assert !this.instance.exists(1);
-        assert !this.instance.exists(2);
-        assert !this.instance.exists(3);
+        assertThrows(java.util.EmptyStackException.class,
+                ()-> {this.instance.exists(1);});
+        assertThrows(java.util.EmptyStackException.class,
+                ()-> {this.instance.exists(2);});
     }
     @Test
     void exists4() {
@@ -192,5 +192,8 @@ class SkladTest {
         assert this.instance.exists(1);
         this.instance.removeFirst();
         assert !this.instance.exists(1);
+        this.instance.removeFirst();
+        assertThrows(java.util.EmptyStackException.class,
+                ()-> {this.instance.exists(1);});
     }
 }

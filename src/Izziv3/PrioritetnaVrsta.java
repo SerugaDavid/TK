@@ -113,6 +113,8 @@ public class PrioritetnaVrsta<Tip extends Comparable> implements Seznam<Tip> {
 
     @Override
     public Tip remove(Tip e) {
+        if (this.isEmpty())
+            throw new java.util.EmptyStackException();
         int index = -1;
         for (int i = 0; i < this.end; i++) {
             if(this.heap[i].equals(e)) {
@@ -130,6 +132,8 @@ public class PrioritetnaVrsta<Tip extends Comparable> implements Seznam<Tip> {
 
     @Override
     public boolean exists(Tip e) {
+        if (this.isEmpty())
+            throw new java.util.EmptyStackException();
         for (int i = 0; i < this.end; i++) {
             if (this.heap[i].equals(e))
                 return true;
