@@ -2,9 +2,9 @@ package Izziv3;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.util.EmptyStackException;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -179,5 +179,81 @@ class PrioritetnaVrstaTest {
         pv.add("Test1");
         pv.add("Test2");
         assertFalse(pv.isEmpty());
+    }
+
+    @Test
+    void testRemove() {
+        for (int i = 0; i < 3; i++) {
+            pv.add("Test" + i);
+        }
+        assertEquals("Test0", pv.remove("Test0"));
+        assertEquals("Test2", pv.getFirst());
+        assertEquals("Test2", pv.remove("Test2"));
+        assertEquals("Test1", pv.getFirst());
+        assertEquals(1, pv.size());
+    }
+
+    @Test
+    void testRemoveNotExisting() {
+        for (int i = 0; i < 3; i++) {
+            pv.add("Test" + i);
+        }
+        assertThrows(NoSuchElementException.class, () -> pv.remove("Test3"));
+    }
+
+    @Test
+    void testRemoveTillEmpty() {
+        pv.add("Test");
+        pv.remove("Test");
+        assertTrue(pv.isEmpty());
+        assertThrows(EmptyStackException.class, () -> pv.remove("Test1"));
+    }
+
+    @Test
+    void testRemoveTillError() {
+        for (int i = 0; i < 3; i++) {
+            pv.add("Test" + i);
+        }
+        assertEquals("Test0", pv.remove("Test0"));
+        assertEquals("Test2", pv.remove("Test2"));
+        assertEquals("Test1", pv.removeFirst());
+        assertThrows(EmptyStackException.class, () -> pv.remove("Test1"));
+    }
+
+    @Test
+    void testExistsTrue() {
+        for (int i = 0; i < 3; i++) {
+            pv.add("Test" + i);
+        }
+        assertTrue(pv.exists("Test0"));
+        assertTrue(pv.exists("Test1"));
+        assertTrue(pv.exists("Test2"));
+    }
+
+    @Test
+    void testExistsFalse() {
+        for (int i = 0; i < 3; i++) {
+            pv.add("Test" + i);
+        }
+        assertFalse(pv.exists("Test3"));
+        assertFalse(pv.exists("Test4"));
+        assertFalse(pv.exists("Test5"));
+    }
+
+    @Test
+    void testExistsEmpty() {
+        assertThrows(EmptyStackException.class, () -> pv.exists("Test1"));
+    }
+
+    @Test
+    void testExitstTillGone() {
+        for (int i = 0; i < 3; i++) {
+            pv.add("Test" + i);
+        }
+        for (int i = 0; i < 3; i++) {
+            assertFalse(pv.exists("Test" + (i - 1)));
+            assertEquals("Test" + i, pv.remove("Test" + i));
+        }
+        assertThrows(EmptyStackException.class, () -> pv.exists("Test1"));
     }
 }

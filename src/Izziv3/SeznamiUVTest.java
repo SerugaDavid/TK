@@ -46,8 +46,8 @@ class SeznamiUVTest {
         System.out.println("tests_removeBasic");
         assertEquals("OK", this.uv.processInput("s_add Test1"));
         assertEquals("OK", this.uv.processInput("s_add Test2"));
-        assertEquals("Test2", this.uv.processInput("s_remove"));
-        assertEquals("Test1", this.uv.processInput("s_remove"));
+        assertEquals("Test2", this.uv.processInput("s_removeTop"));
+        assertEquals("Test1", this.uv.processInput("s_removeTop"));
     }
 
     //@Disabled("To be implemented at a later stage")
@@ -60,10 +60,10 @@ class SeznamiUVTest {
                 "s_add \"Another test with multiple words\""));
         assertEquals("2", this.uv.processInput("s_size"));
         assertEquals("Another test with multiple words",
-                this.uv.processInput("s_remove"));
+                this.uv.processInput("s_removeTop"));
         assertEquals("1", this.uv.processInput("s_size"));
         assertEquals("Test with multiple words",
-                this.uv.processInput("s_remove"));
+                this.uv.processInput("s_removeTop"));
         assertEquals("0", this.uv.processInput("s_size"));
     }
 
@@ -71,11 +71,11 @@ class SeznamiUVTest {
     void tests_removeNothing() {
         System.out.println("tests_removeNothing");
         assertEquals("Error: stack is empty",
-                this.uv.processInput("s_remove"));
+                this.uv.processInput("s_removeTop"));
         assertEquals("Error: please specify a string",
                 this.uv.processInput("s_add"));
         assertEquals("Error: stack is empty",
-                this.uv.processInput("s_remove"));
+                this.uv.processInput("s_removeTop"));
     }
 
     @Test
@@ -90,7 +90,7 @@ class SeznamiUVTest {
         assertEquals("OK", this.uv.processInput("s_add Test"));
         assertEquals("OK", this.uv.processInput("s_reset"));
         assertEquals("Error: stack is empty",
-                this.uv.processInput("s_remove"));
+                this.uv.processInput("s_removeTop"));
         assertEquals("0", this.uv.processInput("s_size"));
     }
 
@@ -183,6 +183,66 @@ class SeznamiUVTest {
         assertEquals("OK", this.uv.processInput("s_add Test2"));
         assertEquals("OK", this.uv.processInput("s_add Test3"));
         assertEquals("-1", this.uv.processInput("s_search Test4"));
+    }
+
+    @Test
+    void s_removeElementEmpty() {
+        System.out.println("s_removeElementEmpty");
+        assertEquals("Error: Data structure is empty", this.uv.processInput("s_remove Test"));
+    }
+
+    @Test
+    void s_removeElementEmptyString() {
+        System.out.println("s_removeElementEmptyString");
+        assertEquals("Error: Please specify a string", this.uv.processInput("s_remove"));
+    }
+
+    @Test
+    void s_removeElementWrong() {
+        System.out.println("s_removeElementWrong");
+        assertEquals("OK", this.uv.processInput("s_add Test1"));
+        assertEquals("OK", this.uv.processInput("s_add Test2"));
+        assertEquals("OK", this.uv.processInput("s_add Test3"));
+        assertEquals("Error: Element not found", this.uv.processInput("s_remove Test4"));
+    }
+
+    @Test
+    void s_removeElementCorrect() {
+        System.out.println("s_removeElementCorrect");
+        assertEquals("OK", this.uv.processInput("s_add Test1"));
+        assertEquals("OK", this.uv.processInput("s_add Test2"));
+        assertEquals("OK", this.uv.processInput("s_add Test3"));
+        assertEquals("Test2", this.uv.processInput("s_remove Test2"));
+    }
+
+    @Test
+    void s_existsEmpty() {
+        System.out.println("s_existsEmpty");
+        assertEquals("Error: Data structure is empty", this.uv.processInput("s_exists Test"));
+    }
+
+    @Test
+    void s_existsEmptyString() {
+        System.out.println("s_existsEmptyString");
+        assertEquals("Error: Please specify a string", this.uv.processInput("s_exists"));
+    }
+
+    @Test
+    void s_existsWrong() {
+        System.out.println("s_existsWrong");
+        assertEquals("OK", this.uv.processInput("s_add Test1"));
+        assertEquals("OK", this.uv.processInput("s_add Test2"));
+        assertEquals("OK", this.uv.processInput("s_add Test3"));
+        assertEquals("Element does not exist in data structure", this.uv.processInput("s_exists Test4"));
+    }
+
+    @Test
+    void s_existsCorrect() {
+        System.out.println("s_existsCorrect");
+        assertEquals("OK", this.uv.processInput("s_add Test1"));
+        assertEquals("OK", this.uv.processInput("s_add Test2"));
+        assertEquals("OK", this.uv.processInput("s_add Test3"));
+        assertEquals("Element exists in data structure", this.uv.processInput("s_exists Test2"));
     }
     
     // prioritetna vrsta testi
@@ -303,5 +363,73 @@ class SeznamiUVTest {
             assertEquals("OK", this.uv.processInput("pq_add Test" + i));
         }
         assertEquals("4", this.uv.processInput("pq_size"));
+    }
+
+    @Test
+    void pq_removeElementEmpty() {
+        System.out.println("pq_removeElementEmpty");
+        assertEquals("Error: Data structure is empty", this.uv.processInput("pq_remove Test1"));
+    }
+
+    @Test
+    void pq_removeElementNotFound() {
+        System.out.println("pq_removeElementNotFound");
+        assertEquals("OK", this.uv.processInput("pq_add Test1"));
+        assertEquals("OK", this.uv.processInput("pq_add Test2"));
+        assertEquals("OK", this.uv.processInput("pq_add Test3"));
+        assertEquals("Error: Element not found", this.uv.processInput("pq_remove Test4"));
+    }
+
+    @Test
+    void pq_removeElementOne() {
+        System.out.println("pq_removeElementOne");
+        assertEquals("OK", this.uv.processInput("pq_add Test1"));
+        assertEquals("OK", this.uv.processInput("pq_add Test2"));
+        assertEquals("OK", this.uv.processInput("pq_add Test3"));
+        assertEquals("Test2", this.uv.processInput("pq_remove Test2"));
+        assertEquals("2", this.uv.processInput("pq_size"));
+    }
+
+    @Test
+    void pq_removeElementEmptyString() {
+        System.out.println("pq_removeElementTwo");
+        assertEquals("OK", this.uv.processInput("pq_add Test1"));
+        assertEquals("OK", this.uv.processInput("pq_add Test2"));
+        assertEquals("OK", this.uv.processInput("pq_add Test3"));
+        assertEquals("Error: Please specify a string", this.uv.processInput("pq_remove"));
+
+    }
+
+    @Test
+    void pq_existsEmpty() {
+        System.out.println("pq_existsEmpty");
+        assertEquals("Error: Data structure is empty", this.uv.processInput("pq_exists Test1"));
+    }
+
+    @Test
+    void pq_existsNotFound() {
+        System.out.println("pq_existsNotFound");
+        assertEquals("OK", this.uv.processInput("pq_add Test1"));
+        assertEquals("OK", this.uv.processInput("pq_add Test2"));
+        assertEquals("OK", this.uv.processInput("pq_add Test3"));
+        assertEquals("Element does not exist in data structure", this.uv.processInput("pq_exists Test4"));
+    }
+
+    @Test
+    void pq_existsOne() {
+        System.out.println("pq_existsOne");
+        assertEquals("OK", this.uv.processInput("pq_add Test1"));
+        assertEquals("OK", this.uv.processInput("pq_add Test2"));
+        assertEquals("OK", this.uv.processInput("pq_add Test3"));
+        assertEquals("Element exists in data structure", this.uv.processInput("pq_exists Test1"));
+    }
+
+    @Test
+    void pq_existsEmptyString() {
+        System.out.println("pq_existsEmptyString");
+        assertEquals("OK", this.uv.processInput("pq_add Test1"));
+        assertEquals("OK", this.uv.processInput("pq_add Test2"));
+        assertEquals("OK", this.uv.processInput("pq_add Test3"));
+        assertEquals("Error: Please specify a string", this.uv.processInput("pq_exists"));
     }
 }

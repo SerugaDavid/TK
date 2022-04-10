@@ -81,7 +81,7 @@ public class PrioritetnaVrsta<Tip extends Comparable> implements Seznam<Tip> {
 
     @Override
     public Tip getFirst() {
-        if(this.isEmpty()) throw new
+        if (this.isEmpty()) throw new
                 java.util.NoSuchElementException();
         return (Tip) this.heap[0];
     }
@@ -109,5 +109,35 @@ public class PrioritetnaVrsta<Tip extends Comparable> implements Seznam<Tip> {
             System.out.print(this.heap[i] + " ");
         }
         System.out.println();
+    }
+
+    @Override
+    public Tip remove(Tip e) {
+        if (this.isEmpty())
+            throw new java.util.EmptyStackException();
+        int index = -1;
+        for (int i = 0; i < this.end; i++) {
+            if(this.heap[i].equals(e)) {
+                index = i;
+                break;
+            }
+        }
+        if (index == -1)
+            throw new java.util.NoSuchElementException();
+        Tip elt = (Tip) this.heap[index];
+        this.swap(index, --this.end);
+        this.bubbleDown(index);
+        return elt;
+    }
+
+    @Override
+    public boolean exists(Tip e) {
+        if (this.isEmpty())
+            throw new java.util.EmptyStackException();
+        for (int i = 0; i < this.end; i++) {
+            if (this.heap[i].equals(e))
+                return true;
+        }
+        return false;
     }
 }

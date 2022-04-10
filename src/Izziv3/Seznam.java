@@ -13,4 +13,8 @@ public interface Seznam<Tip> {
     int depth();
     // Ali je podakovna struktura prazna
     boolean isEmpty();
+    // odstranjevanje (in vracanje) dolocenega elementa iz strukture
+    Tip remove(Tip e);
+    // ali element obstaja v strukturi
+    boolean exists(Tip e);
 }
