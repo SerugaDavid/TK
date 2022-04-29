@@ -432,4 +432,74 @@ class SeznamiUVTest {
         assertEquals("OK", this.uv.processInput("pq_add Test3"));
         assertEquals("Error: Please specify a string", this.uv.processInput("pq_exists"));
     }
+
+    // testi za use
+    // sklad
+    @Test
+    void useSAdd() {
+        assertEquals("OK", this.uv.processInput("use sk add Test1"));
+    }
+
+    @Test
+    void useSRemoveFirst() {
+        assertEquals("OK", this.uv.processInput("use sk add Test1"));
+        assertEquals("OK", this.uv.processInput("use sk add Test2"));
+        assertEquals("OK", this.uv.processInput("use sk add Test3"));
+        assertEquals("Test1", this.uv.processInput("use sk removeFirst"));
+    }
+
+    @Test
+    void useSGetFirst() {
+        assertEquals("OK", this.uv.processInput("use sk add Test1"));
+        assertEquals("OK", this.uv.processInput("use sk add Test2"));
+        assertEquals("OK", this.uv.processInput("use sk add Test3"));
+        assertEquals("Test1", this.uv.processInput("use sk getFirst"));
+    }
+
+    @Test
+    void useSSize() {
+        assertEquals("OK", this.uv.processInput("use sk add Test1"));
+        assertEquals("OK", this.uv.processInput("use sk add Test2"));
+        assertEquals("OK", this.uv.processInput("use sk add Test3"));
+        assertEquals("3", this.uv.processInput("use sk size"));
+    }
+
+    @Test
+    void useSDepth() {
+        assertEquals("OK", this.uv.processInput("use sk add Test1"));
+        assertEquals("OK", this.uv.processInput("use sk add Test2"));
+        assertEquals("OK", this.uv.processInput("use sk add Test3"));
+        assertEquals("3", this.uv.processInput("use sk depth"));
+    }
+
+    @Test
+    void useSIsEmpty() {
+        assertEquals("OK", this.uv.processInput("use sk add Test1"));
+        assertEquals("OK", this.uv.processInput("use sk add Test2"));
+        assertEquals("OK", this.uv.processInput("use sk add Test3"));
+        assertEquals("false", this.uv.processInput("use sk isEmpty"));
+        assertEquals("Test1", this.uv.processInput("use sk removeFirst"));
+        assertEquals("Test2", this.uv.processInput("use sk removeFirst"));
+        assertEquals("Test3", this.uv.processInput("use sk removeFirst"));
+        assertEquals("true", this.uv.processInput("use sk isEmpty"));
+    }
+
+    @Test
+    void useSRemove() {
+        assertEquals("OK", this.uv.processInput("use sk add Test1"));
+        assertEquals("OK", this.uv.processInput("use sk add Test2"));
+        assertEquals("OK", this.uv.processInput("use sk add Test3"));
+        assertEquals("Test2", this.uv.processInput("use sk remove Test2"));
+        assertEquals("Test1", this.uv.processInput("use sk remove Test1"));
+        assertEquals("Test3", this.uv.processInput("use sk remove Test3"));
+    }
+
+    @Test
+    void useSExists() {
+        assertEquals("OK", this.uv.processInput("use sk add Test1"));
+        assertEquals("OK", this.uv.processInput("use sk add Test2"));
+        assertEquals("OK", this.uv.processInput("use sk add Test3"));
+        assertEquals("Element does not exist in data structure", this.uv.processInput("use sk exists Test4"));
+        assertEquals("Element exists in data structure", this.uv.processInput("use sk exists Test2"));
+    }
 }
