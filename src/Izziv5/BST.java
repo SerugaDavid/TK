@@ -1,4 +1,4 @@
-package Izziv3;
+package Izziv5;
 
 public class BST<Tip extends Comparable<Tip>> implements Seznam<Tip> {
     class Node<Tip extends Comparable<Tip>> {
