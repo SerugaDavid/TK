@@ -1,4 +1,4 @@
-package Izziv3;
+package Izziv5;
 
 public interface Seznam<Tip> {
     // Dodajanje elementa v podatkovno strukturo

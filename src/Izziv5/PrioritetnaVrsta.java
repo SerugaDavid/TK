@@ -1,4 +1,4 @@
-package Izziv3;
+package Izziv5;
 
 public class PrioritetnaVrsta<Tip extends Comparable> implements Seznam<Tip> {
 
