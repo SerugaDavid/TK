@@ -63,12 +63,12 @@ public class BinomskaKopica<Tip extends Comparable> implements Seznam<Tip> {
                 current = max;
                 //prev = max;
                 max.degree++;
-                if (this.topNode.degree >= max.degree-1)
+                if (this.topNode.degree >= max.degree - 1)
                     this.topNode = max;
                 else {
                     min = this.topNode;
                     int count = 0;
-                    while (min.degree != max.degree - 1) {
+                    while (min.degree >= max.degree - 1) {
                         min = min.sibling;
                         count++;
                     }
