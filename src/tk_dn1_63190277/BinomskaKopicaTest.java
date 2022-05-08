@@ -100,6 +100,7 @@ class BinomskaKopicaTest {
             this.kopica.add(3);
             assertEquals(3, this.kopica.removeFirst());
             assertEquals(2, this.kopica.size());
+            assertEquals("[2, 1]", this.kopica.asList().toString());
             assertEquals(2, this.kopica.removeFirst());
             assertEquals(1, this.kopica.size());
         }
@@ -111,6 +112,7 @@ class BinomskaKopicaTest {
             for (int i = 15; i >= 10; i--)
                 assertEquals(i, this.kopica.removeFirst());
             assertEquals(9, this.kopica.size());
+            assertEquals("[9, 8, 4, 2, 1, 3, 6, 5, 7]", this.kopica.asList().toString());
         }
     }
 
@@ -249,7 +251,6 @@ class BinomskaKopicaTest {
         }
     }
 
-    @Disabled
     @Nested
     class removeTest {
         private BinomskaKopica<Integer> kopica;
@@ -260,8 +261,69 @@ class BinomskaKopicaTest {
         }
 
         @Test
-        void remove() {
+        void removeEmpty() {
+            assertNull(this.kopica.remove(1));
+        }
 
+        @Test
+        void removeOne() {
+            this.kopica.add(1);
+            assertEquals(1, this.kopica.remove(1));
+            assertEquals(0, this.kopica.size());
+        }
+
+        @Test
+        void removeMultiple() {
+            this.kopica.add(1);
+            this.kopica.add(2);
+            this.kopica.add(3);
+            this.kopica.add(4);
+            this.kopica.add(5);
+            assertEquals(3, this.kopica.remove(3));
+            assertEquals(4, this.kopica.remove(4));
+            assertEquals(5, this.kopica.remove(5));
+            assertEquals(2, this.kopica.size());
+            assertEquals("[2, 1]", this.kopica.asList().toString());
+        }
+
+        @Test
+        void removeNotExisting() {
+            this.kopica.add(1);
+            this.kopica.add(2);
+            this.kopica.add(3);
+            this.kopica.add(4);
+            assertNull(this.kopica.remove(5));
+        }
+
+        @Test
+        void removeDuplicate() {
+            this.kopica.add(1);
+            this.kopica.add(2);
+            this.kopica.add(3);
+            this.kopica.add(1);
+            assertEquals(1, this.kopica.remove(1));
+            assertEquals(1, this.kopica.remove(1));
+            assertEquals(2, this.kopica.size());
+            assertEquals("[3, 2]", this.kopica.asList().toString());
+        }
+
+        @Test
+        void removeDeleted() {
+            this.kopica.add(1);
+            this.kopica.add(2);
+            this.kopica.add(3);
+            assertEquals(1, this.kopica.remove(1));
+            assertNull(this.kopica.remove(1));
+            assertEquals(2, this.kopica.size());
+        }
+
+        @Test
+        void removeBig() {
+            for (int i = 1; i <= 20; i++)
+                this.kopica.add(i);
+            for (int i = 1; i < 10; i+=2)
+                assertEquals(i, this.kopica.remove(i));
+            assertEquals("[11, 12, 10, 16, 15, 14, 13, 6, 4, 2, 8]", this.kopica.asList().toString());
         }
     }
 

@@ -90,9 +90,13 @@ public class BinomskaKopica<Tip extends Comparable> implements Seznam<Tip> {
         ArrayList<Object> max = this.getMaxElement();
         if (max == null)
             return null;
-        Tip value = (Tip) max.get(0);
-        int index = (int) max.get(1);
-        BinomialHeapNode<Tip> node = (BinomialHeapNode<Tip>) max.get(2);
+        return this.removeElevated(max);
+    }
+
+    private Tip removeElevated(ArrayList<Object> arr) {
+        Tip value = (Tip) arr.get(0);
+        int index = (int) arr.get(1);
+        BinomialHeapNode<Tip> node = (BinomialHeapNode<Tip>) arr.get(2);
         this.length--;
         if (this.length == 0) {
             this.topNode = null;
@@ -194,7 +198,33 @@ public class BinomskaKopica<Tip extends Comparable> implements Seznam<Tip> {
 
     @Override
     public Tip remove(Tip e) {
-        return null;
+        ArrayList<Object> found = this.findElement(e, this.topNode, 0);
+        if (found == null)
+            return null;
+        found.set(2, bubbleUp((BinomialHeapNode<Tip>) found.get(2)));
+        return this.removeElevated(found);
+    }
+
+    private BinomialHeapNode<Tip> bubbleUp(BinomialHeapNode<Tip> node) {
+        if (node.parent == null)
+            return node;
+        Tip tmp = node.value;
+        node.value = node.parent.value;
+        node.parent.value = tmp;
+        return bubbleUp(node.parent);
+    }
+
+    private ArrayList<Object> findElement(Tip e, BinomialHeapNode<Tip> node, int index) {
+        if (node == null)
+            return null;
+        if (node.value.equals(e))
+            return new ArrayList<>(Arrays.asList(e, index, node));
+        ArrayList<Object> result = this.findElement(e, node.child, index);
+        if (result != null) {
+            result.set(1, index);
+            return result;
+        }
+        return this.findElement(e, node.sibling, index + 1);
     }
 
     @Override
