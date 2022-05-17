@@ -1,5 +1,8 @@
 package Izziv5;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PrioritetnaVrsta<Tip extends Comparable> implements Seznam<Tip> {
 
     private Object[] heap;
@@ -139,5 +142,14 @@ public class PrioritetnaVrsta<Tip extends Comparable> implements Seznam<Tip> {
                 return true;
         }
         return false;
+    }
+
+    @Override
+    public List<Tip> asList() {
+        List<Tip> list = new ArrayList<>();
+        for(int i = 0; i < this.end; i++) {
+            list.add((Tip) this.heap[i]);
+        }
+        return list;
     }
 }

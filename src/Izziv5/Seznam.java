@@ -1,5 +1,7 @@
 package Izziv5;
 
+import java.util.List;
+
 public interface Seznam<Tip> {
     // Dodajanje elementa v podatkovno strukturo
     void add(Tip e);
@@ -17,4 +19,6 @@ public interface Seznam<Tip> {
     Tip remove(Tip e);
     // ali element obstaja v strukturi
     boolean exists(Tip e);
+
+    List<Tip> asList();
 }

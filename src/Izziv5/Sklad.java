@@ -1,6 +1,8 @@
 package Izziv5;
 
+import java.util.ArrayList;
 import java.util.EmptyStackException;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 public class Sklad<Tip> implements Seznam<Tip> {
@@ -110,4 +112,20 @@ public class Sklad<Tip> implements Seznam<Tip> {
             this.add(tmp.removeFirst());
         return tmp2 != null && tmp2.equals(e);
     }
+
+    public List<Tip> asList(Element<Tip> node) {
+        if (node == null)
+            return new ArrayList<>();
+        List<Tip> list = new ArrayList<>();
+        list.add(node.vrednost);
+        list.addAll(asList(node.naslednji));
+        return list;
+    }
+
+    @Override
+    public List<Tip> asList() {
+        return asList(this.vrh);
+    }
+
+
 }

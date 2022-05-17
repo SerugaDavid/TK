@@ -1,5 +1,8 @@
 package Izziv5;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BST<Tip extends Comparable<Tip>> implements Seznam<Tip> {
     class Node<Tip extends Comparable<Tip>> {
         Tip data;
@@ -183,12 +186,20 @@ public class BST<Tip extends Comparable<Tip>> implements Seznam<Tip> {
         return this.member(e);
     }
 
-    public void inOrder(Node<Tip> node){
-        if (node == null)
-            return;
-        this.inOrder(node.left);
-        System.out.println(node.data);
-        this.inOrder(node.right);
+    @Override
+    public List<Tip> asList() {
+        return this.inOrder(this.root);
+    }
+
+    public List<Tip> inOrder(Node<Tip> node){
+        List<Tip> list = new ArrayList<Tip>();
+        if (node == null) {
+            return list;
+        }
+        list.addAll(this.inOrder(node.left));
+        list.add(node.data);
+        list.addAll(this.inOrder(node.right));
+        return list;
     }
 
     public void preOrder(Node<Tip> node){
