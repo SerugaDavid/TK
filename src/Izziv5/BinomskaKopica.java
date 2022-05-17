@@ -1,6 +1,5 @@
 package Izziv5;
 
-import tk_dn1_63190277.Seznam;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
