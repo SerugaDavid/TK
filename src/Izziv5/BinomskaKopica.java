@@ -2,6 +2,7 @@ package Izziv5;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EmptyStackException;
 import java.util.List;
 
 public class BinomskaKopica<Tip extends Comparable> implements Seznam<Tip> {
@@ -229,6 +230,8 @@ public class BinomskaKopica<Tip extends Comparable> implements Seznam<Tip> {
 
     @Override
     public boolean exists(Tip e) {
+        if (this.isEmpty())
+            throw new java.util.EmptyStackException();
         return asList().contains(e);
     }
 

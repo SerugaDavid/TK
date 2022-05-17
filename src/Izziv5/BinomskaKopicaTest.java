@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.EmptyStackException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class BinomskaKopicaTest {
@@ -337,7 +339,7 @@ class BinomskaKopicaTest {
 
         @Test
         void existsEmpty() {
-            assertFalse(this.kopica.exists(1));
+            assertThrows(EmptyStackException.class, () -> this.kopica.exists(1));
         }
 
         @Test
