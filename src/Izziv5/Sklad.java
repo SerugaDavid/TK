@@ -1,5 +1,6 @@
 package Izziv5;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.List;
@@ -127,5 +128,42 @@ public class Sklad<Tip> implements Seznam<Tip> {
         return asList(this.vrh);
     }
 
+    @Override
+    public void print() {
+        this.printElement(this.vrh);
+    }
 
+    private void printElement(Element<Tip> node) {
+        if (node == null)
+            return;
+        System.out.println(node.vrednost);
+        printElement(node.naslednji);
+    }
+
+    @Override
+    public void save(OutputStream outputStream) throws IOException {
+        ObjectOutputStream out = new ObjectOutputStream(outputStream);
+        out.writeInt(this.size());
+        this.saveElement(this.vrh, out);
+    }
+
+    private void saveElement(Element<Tip> node, ObjectOutputStream out) throws IOException {
+        if (node == null)
+            return;
+        out.writeObject(node.vrednost);
+        saveElement(node.naslednji, out);
+    }
+
+    @Override
+    public void restore(InputStream inputStream) throws IOException,ClassNotFoundException {
+        ObjectInputStream in = new ObjectInputStream(inputStream);
+        int size = in.readInt();
+        this.restoreElement(in, size);
+    }
+
+    private Element restoreElement(ObjectInputStream in, int count) throws IOException,ClassNotFoundException {
+        if (count != 0)
+            return new Element((Tip)in.readObject(), restoreElement(in, count - 1));
+        return null;
+    }
 }

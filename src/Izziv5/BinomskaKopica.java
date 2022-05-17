@@ -1,5 +1,8 @@
 package Izziv5;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EmptyStackException;
@@ -249,4 +252,20 @@ public class BinomskaKopica<Tip extends Comparable> implements Seznam<Tip> {
     public List<Tip> asList() {
         return asList(this.topNode);
     }
+
+    @Override
+    public void print() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void save(OutputStream outputStream) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void restore(InputStream inputStream) throws IOException,ClassNotFoundException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

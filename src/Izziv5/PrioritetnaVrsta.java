@@ -1,5 +1,6 @@
 package Izziv5;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -151,5 +152,28 @@ public class PrioritetnaVrsta<Tip extends Comparable> implements Seznam<Tip> {
             list.add((Tip) this.heap[i]);
         }
         return list;
+    }
+
+    @Override
+    public void print() {
+        System.out.print("[ ");
+        for(int i = 0; i < this.end; i++) {
+            System.out.print(this.heap[i].toString() + " ");
+        }
+        System.out.println("]");
+    }
+
+    @Override
+    public void save(OutputStream outputStream) throws IOException {
+        ObjectOutputStream oos = new ObjectOutputStream(outputStream);
+        oos.writeObject(this.heap);
+        oos.close();
+    }
+
+    @Override
+    public void restore(InputStream inputStream) throws IOException,ClassNotFoundException {
+        ObjectInputStream ois = new ObjectInputStream(inputStream);
+        this.heap = (Object[]) ois.readObject();
+        ois.close();
     }
 }

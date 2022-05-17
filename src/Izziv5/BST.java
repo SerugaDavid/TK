@@ -1,5 +1,6 @@
 package Izziv5;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -217,4 +218,49 @@ public class BST<Tip extends Comparable<Tip>> implements Seznam<Tip> {
         this.postOrder(node.right);
         System.out.println(node.data);
     }
+
+    @Override
+    public void print() {
+        print(this.root, 0);
+    }
+    private void print(Node node, int numTabs) {
+        if (node == null)
+            return;
+        print(node.right, numTabs+1);
+        for (int i = 0; i < numTabs; i++)
+            System.out.print('\t');
+        System.out.println(node.data);
+        print(node.left, numTabs + 1);
+    }
+
+    @Override
+    public void save(OutputStream outputStream) throws IOException {
+        ObjectOutputStream out = new ObjectOutputStream(outputStream);
+        out.writeInt(this.size());
+        save(this.root, out);
+    }
+    private void save(Node node, ObjectOutputStream out) throws IOException {
+        if (node == null)
+            return;
+        save(node.left, out);
+        out.writeObject(node.data);
+        save(node.right, out);
+    }
+
+    @Override
+    public void restore(InputStream inputStream) throws IOException, ClassNotFoundException {
+        ObjectInputStream in = new ObjectInputStream(inputStream);
+        int count = in.readInt();
+        this.root = restore(in, count, null);
+    }
+    private Node restore(ObjectInputStream in, int count, Node parent) throws IOException, ClassNotFoundException {
+        if (count == 0) return null;
+        Node nodeLeft = restore(in, count / 2, null);
+        Node node = new Node((Tip) in.readObject(), parent);
+        nodeLeft.parent = node;
+        node.left = nodeLeft;
+        node.right = restore(in, (count - 1) / 2, node);
+        return node;
+    }
+
 }

@@ -1,5 +1,9 @@
 package Izziv5;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
@@ -12,6 +16,7 @@ public class SeznamiUV {
 
     private HashMap<String, Seznam<String>> seznami;
     Seznam<String> seznam;
+    String currSeznam;
 
     public SeznamiUV() {
         this.sklad = new Sklad<String>();
@@ -32,7 +37,8 @@ public class SeznamiUV {
         switch (token) {
             case "use":
                 if (sc.hasNext()) {
-                    this.seznam = this.seznami.get(sc.next());
+                    this.currSeznam = sc.next();
+                    this.seznam = this.seznami.get(this.currSeznam);
                     if (this.seznam == null)
                         return "Error: please specify a correct data structure type (pv, sk, bst)";
                 } else
@@ -105,6 +111,47 @@ public class SeznamiUV {
             case "asList":
                 result = String.valueOf(this.seznam.asList());
                 break;
+            case "print":
+                seznam.print();
+                break;
+            case "save":
+                if (sc.hasNext()) {
+                    try {
+                        seznam.save(new FileOutputStream(sc.next()));
+                    } catch (FileNotFoundException e) {
+                        result = "Error: file not found";
+                    } catch (IOException e) {
+                        result = "Error: IO error " + e.getMessage();
+                    }
+                } else {
+                    result = "Error: please specify a file name";
+                }
+                break;
+            case "restore":
+                if (sc.hasNext()) {
+                    try {
+                        seznam.restore(new FileInputStream(sc.next()));
+                    } catch (IOException e) {
+                        result = "Error: IO error " + e.getMessage();
+                    } catch (ClassNotFoundException e) {
+                        result = "Error: Unknown format";
+                    }
+
+                } else {
+                    result = "Error: please specify a file name";
+                }
+                break;
+            case "reset":
+                switch (this.currSeznam) {
+                    case "pv" -> this.seznami.put("pv", new PrioritetnaVrsta<>());
+                    case "sk" -> this.seznami.put("sk", new Sklad<>());
+                    case "bst" -> this.seznami.put("bst", new BST<>());
+                    case "bk" -> this.seznami.put("bk", new BinomskaKopica<>());
+                }
+                this.seznam = this.seznami.get(this.currSeznam);
+                break;
+            case "exit":
+                return "Have a nice day.";
 
 //            // for all other cases
 //            case "s_add":

@@ -1,5 +1,8 @@
 package Izziv5;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 public interface Seznam<Tip> {
@@ -21,4 +24,10 @@ public interface Seznam<Tip> {
     boolean exists(Tip e);
 
     List<Tip> asList();
+
+    void print();
+
+    void save(OutputStream outputStream) throws IOException;
+
+    void restore(InputStream inputStream) throws IOException,ClassNotFoundException;
 }
