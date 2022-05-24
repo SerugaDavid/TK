@@ -1,10 +1,13 @@
-package Izziv5;
+package tk_iz09_63190277;
 
 import java.io.*;
 
 public class PodatkovnaBaza {
     public static void main(String[] args) {
         SeznamiUV seznamiUV = new SeznamiUV();
+        seznamiUV.addImpl("sk", new Sklad<>());
+        seznamiUV.addImpl("pv", new PrioritetnaVrsta<>());
+        seznamiUV.addImpl("bst", new BST<>());
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String input;
         String output;

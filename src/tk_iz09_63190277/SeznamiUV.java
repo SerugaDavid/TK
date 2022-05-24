@@ -1,4 +1,4 @@
-package Izziv5;
+package tk_iz09_63190277;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -117,7 +117,7 @@ public class SeznamiUV {
                         } catch (FileNotFoundException e) {
                             result = "Error: file not found";
                         } catch (IOException e) {
-                            result = "Error: IO error " + e.getMessage();
+                            result = "Error: IO error";
                         }
                     } else {
                         result = "Error: please specify a file name";
@@ -150,8 +150,7 @@ public class SeznamiUV {
                     return "Have a nice day.";
 
             }
-        }
-        catch (OutOfMemoryError e) {
+        } catch (OutOfMemoryError e) {
             System.err.println(memoryError);
             return memoryError;
         }

@@ -1,11 +1,10 @@
-package Izziv5;
+package tk_iz09_63190277;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EmptyStackException;
 import java.util.List;
 
 public class BinomskaKopica<Tip extends Comparable> implements Seznam<Tip> {

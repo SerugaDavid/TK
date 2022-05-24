@@ -1,11 +1,13 @@
-package Izziv5;
+package tk_iz09_63190277;
 
+import org.easymock.EasyMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import static org.easymock.EasyMock.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SeznamiUVTest {
@@ -18,7 +20,7 @@ class SeznamiUVTest {
     }
 
     @Nested
-    class testUse {
+    class testMock {
 
         SeznamiUV uv;
 
@@ -27,6 +29,49 @@ class SeznamiUVTest {
             this.uv = new SeznamiUV();
         }
 
+        @Test
+        public void testAddMemoryFullMock() {
+            uv.addImpl("pvmock", new PrioritetnaVrstaMock<>());
+            assertEquals("OK", uv.processInput("use pvmock"));
+            assertEquals("Error: not enough memory, operation failed",
+                    uv.processInput("add Test"));
+        }
+
+        @Nested
+        class testSave {
+            @BeforeEach
+            void setUp() {
+                uv = new SeznamiUV();
+                uv.addImpl("pv", new PrioritetnaVrsta<>());
+                uv.addImpl("pvmock", new PrioritetnaVrstaMock<>());
+            }
+
+            @Test
+            public void pvMock() {
+                assertEquals("OK", uv.processInput("use pvmock"));
+                assertEquals("Error: IO error", uv.processInput("save file.bin"));
+            }
+
+            @Test
+            public void pvEasyMock() {
+                SeznamiUV mock = EasyMock.createMock(SeznamiUV.class);
+                expect(mock.processInput("use pv")).andReturn("OK");
+                expect(mock.processInput("save file.bin")).andReturn("Error: IO error");
+                replay(mock);
+
+                assertEquals("OK", mock.processInput("use pv"));
+                assertEquals("Error: IO error", mock.processInput("save file.bin"));
+
+                verify(mock);
+            }
+        }
+    }
+
+    @Nested
+    class testUse {
+
+        
+
         @Nested
         class useTest {
             SeznamiUV uv;
@@ -34,6 +79,10 @@ class SeznamiUVTest {
             @BeforeEach
             void setUp() {
                 this.uv = new SeznamiUV();
+                this.uv.addImpl("sk", new Sklad<>());
+                this.uv.addImpl("pv", new PrioritetnaVrsta<>());
+                this.uv.addImpl("bst", new BST<>());
+                this.uv.addImpl("bk", new BinomskaKopica<>());
             }
 
             @Test
@@ -61,6 +110,10 @@ class SeznamiUVTest {
             @BeforeEach
             void setUp() {
                 this.uv = new SeznamiUV();
+                this.uv.addImpl("sk", new Sklad<>());
+                this.uv.addImpl("pv", new PrioritetnaVrsta<>());
+                this.uv.addImpl("bst", new BST<>());
+                this.uv.addImpl("bk", new BinomskaKopica<>());
             }
 
             @ParameterizedTest
@@ -113,6 +166,10 @@ class SeznamiUVTest {
             @BeforeEach
             void setUp() {
                 this.uv = new SeznamiUV();
+                this.uv.addImpl("sk", new Sklad<>());
+                this.uv.addImpl("pv", new PrioritetnaVrsta<>());
+                this.uv.addImpl("bst", new BST<>());
+                this.uv.addImpl("bk", new BinomskaKopica<>());
             }
 
 
@@ -126,149 +183,141 @@ class SeznamiUVTest {
 
             @Nested
             class removeFirstPV {
-                SeznamiUV uv;
-
+                
                 @BeforeEach
                 void setUp() {
-                    this.uv = new SeznamiUV();
-                    this.uv.processInput("use pv");
+                    uv.processInput("use pv");
                 }
 
                 @Test
                 void removeFirstOne() {
-                    assertEquals("OK", this.uv.processInput("add Test"));
-                    assertEquals("Test", this.uv.processInput("removeFirst"));
-                    assertEquals("0", this.uv.processInput("size"));
+                    assertEquals("OK", uv.processInput("add Test"));
+                    assertEquals("Test", uv.processInput("removeFirst"));
+                    assertEquals("0", uv.processInput("size"));
                 }
 
                 @Test
                 void removeFirstThree() {
-                    assertEquals("OK", this.uv.processInput("add Test1"));
-                    assertEquals("OK", this.uv.processInput("add Test2"));
-                    assertEquals("OK", this.uv.processInput("add Test3"));
-                    assertEquals("Test3", this.uv.processInput("removeFirst"));
-                    assertEquals("2", this.uv.processInput("size"));
+                    assertEquals("OK", uv.processInput("add Test1"));
+                    assertEquals("OK", uv.processInput("add Test2"));
+                    assertEquals("OK", uv.processInput("add Test3"));
+                    assertEquals("Test3", uv.processInput("removeFirst"));
+                    assertEquals("2", uv.processInput("size"));
                 }
 
                 @Test
                 void removeFirstMany() {
                     int[] numbers = {5, 10, 2, 6, 7, 1, 8, 3, 4, 9};
                     for (int i = 0; i < numbers.length; i++)
-                        assertEquals("OK", this.uv.processInput("add Test" + String.valueOf(numbers[i])));
+                        assertEquals("OK", uv.processInput("add Test" + String.valueOf(numbers[i])));
                     for (int i = 10; i > 0; i--)
-                        assertEquals("Test" + String.valueOf(i), this.uv.processInput("removeFirst"));
+                        assertEquals("Test" + String.valueOf(i), uv.processInput("removeFirst"));
                 }
             }
 
             @Nested
             class removeFirstSK {
-                SeznamiUV uv;
 
                 @BeforeEach
                 void setUp() {
-                    this.uv = new SeznamiUV();
-                    this.uv.processInput("use sk");
+                    uv.processInput("use sk");
                 }
 
                 @Test
                 void removeFirstOne() {
-                    assertEquals("OK", this.uv.processInput("add Test"));
-                    assertEquals("Test", this.uv.processInput("removeFirst"));
-                    assertEquals("0", this.uv.processInput("size"));
+                    assertEquals("OK", uv.processInput("add Test"));
+                    assertEquals("Test", uv.processInput("removeFirst"));
+                    assertEquals("0", uv.processInput("size"));
                 }
 
                 @Test
                 void removeFirstThree() {
-                    assertEquals("OK", this.uv.processInput("add Test1"));
-                    assertEquals("OK", this.uv.processInput("add Test2"));
-                    assertEquals("OK", this.uv.processInput("add Test3"));
-                    assertEquals("Test3", this.uv.processInput("removeFirst"));
-                    assertEquals("2", this.uv.processInput("size"));
+                    assertEquals("OK", uv.processInput("add Test1"));
+                    assertEquals("OK", uv.processInput("add Test2"));
+                    assertEquals("OK", uv.processInput("add Test3"));
+                    assertEquals("Test3", uv.processInput("removeFirst"));
+                    assertEquals("2", uv.processInput("size"));
                 }
 
                 @Test
                 void removeFirstMany() {
                     int[] numbers = {5, 10, 2, 6, 7, 1, 8, 3, 4, 9};
                     for (int i = 0; i < numbers.length; i++)
-                        assertEquals("OK", this.uv.processInput("add Test" + String.valueOf(numbers[i])));
+                        assertEquals("OK", uv.processInput("add Test" + String.valueOf(numbers[i])));
                     for (int i = numbers.length - 1; i >= 0; i--)
-                        assertEquals("Test" + String.valueOf(numbers[i]), this.uv.processInput("removeFirst"));
+                        assertEquals("Test" + String.valueOf(numbers[i]), uv.processInput("removeFirst"));
                 }
             }
 
             @Nested
             class removeFirstBST {
-                SeznamiUV uv;
 
                 @BeforeEach
                 void setUp() {
-                    this.uv = new SeznamiUV();
-                    this.uv.processInput("use bst");
+                    uv.processInput("use bst");
                 }
 
                 @Test
                 void removeFirstOne() {
-                    assertEquals("OK", this.uv.processInput("add Test"));
-                    assertEquals("Test", this.uv.processInput("removeFirst"));
-                    assertEquals("0", this.uv.processInput("size"));
+                    assertEquals("OK", uv.processInput("add Test"));
+                    assertEquals("Test", uv.processInput("removeFirst"));
+                    assertEquals("0", uv.processInput("size"));
                 }
 
                 @Test
                 void removeFirstThree() {
-                    assertEquals("OK", this.uv.processInput("add Test1"));
-                    assertEquals("OK", this.uv.processInput("add Test2"));
-                    assertEquals("OK", this.uv.processInput("add Test3"));
-                    assertEquals("Test1", this.uv.processInput("removeFirst"));
-                    assertEquals("2", this.uv.processInput("size"));
+                    assertEquals("OK", uv.processInput("add Test1"));
+                    assertEquals("OK", uv.processInput("add Test2"));
+                    assertEquals("OK", uv.processInput("add Test3"));
+                    assertEquals("Test1", uv.processInput("removeFirst"));
+                    assertEquals("2", uv.processInput("size"));
                 }
 
                 @Test
                 void removeFirstMany() {
                     int[] numbers = {5, 10, 2, 6, 7, 1, 8, 3, 4, 9};
                     for (int i = 0; i < numbers.length; i++)
-                        assertEquals("OK", this.uv.processInput("add Test" + String.valueOf(numbers[i])));
+                        assertEquals("OK", uv.processInput("add Test" + String.valueOf(numbers[i])));
                     for (int i = 5; i <= 10; i++)
-                        assertEquals("Test" + String.valueOf(numbers[i]), this.uv.processInput("removeFirst"));
-                    assertEquals("2", this.uv.processInput("removeFirst"));
-                    assertEquals("3", this.uv.processInput("removeFirst"));
-                    assertEquals("4", this.uv.processInput("removeFirst"));
-                    assertEquals("1", this.uv.processInput("removeFirst"));
+                        assertEquals("Test" + String.valueOf(numbers[i]), uv.processInput("removeFirst"));
+                    assertEquals("2", uv.processInput("removeFirst"));
+                    assertEquals("3", uv.processInput("removeFirst"));
+                    assertEquals("4", uv.processInput("removeFirst"));
+                    assertEquals("1", uv.processInput("removeFirst"));
                 }
             }
 
             @Nested
             class removeFirstBK {
-                SeznamiUV uv;
 
                 @BeforeEach
                 void setUp() {
-                    this.uv = new SeznamiUV();
-                    this.uv.processInput("use bk");
+                    uv.processInput("use bk");
                 }
 
                 @Test
                 void removeFirstOne() {
-                    assertEquals("OK", this.uv.processInput("add Test"));
-                    assertEquals("Test", this.uv.processInput("removeFirst"));
-                    assertEquals("0", this.uv.processInput("size"));
+                    assertEquals("OK", uv.processInput("add Test"));
+                    assertEquals("Test", uv.processInput("removeFirst"));
+                    assertEquals("0", uv.processInput("size"));
                 }
 
                 @Test
                 void removeFirstThree() {
-                    assertEquals("OK", this.uv.processInput("add Test1"));
-                    assertEquals("OK", this.uv.processInput("add Test2"));
-                    assertEquals("OK", this.uv.processInput("add Test3"));
-                    assertEquals("Test3", this.uv.processInput("removeFirst"));
-                    assertEquals("2", this.uv.processInput("size"));
+                    assertEquals("OK", uv.processInput("add Test1"));
+                    assertEquals("OK", uv.processInput("add Test2"));
+                    assertEquals("OK", uv.processInput("add Test3"));
+                    assertEquals("Test3", uv.processInput("removeFirst"));
+                    assertEquals("2", uv.processInput("size"));
                 }
 
                 @Test
                 void removeFirstMany() {
                     int[] numbers = {5, 10, 2, 6, 7, 1, 8, 3, 4, 9};
                     for (int i = 0; i < numbers.length; i++)
-                        assertEquals("OK", this.uv.processInput("add Test" + String.valueOf(numbers[i])));
+                        assertEquals("OK", uv.processInput("add Test" + String.valueOf(numbers[i])));
                     for (int i = 10; i > 0; i--)
-                        assertEquals("Test" + String.valueOf(i), this.uv.processInput("removeFirst"));
+                        assertEquals("Test" + String.valueOf(i), uv.processInput("removeFirst"));
                 }
             }
         }
@@ -280,6 +329,10 @@ class SeznamiUVTest {
             @BeforeEach
             void setUp() {
                 this.uv = new SeznamiUV();
+                this.uv.addImpl("sk", new Sklad<>());
+                this.uv.addImpl("pv", new PrioritetnaVrsta<>());
+                this.uv.addImpl("bst", new BST<>());
+                this.uv.addImpl("bk", new BinomskaKopica<>());
             }
 
             @ParameterizedTest
@@ -299,109 +352,101 @@ class SeznamiUVTest {
 
             @Nested
             class getFirstPV {
-                SeznamiUV uv;
-
+                
                 @BeforeEach
                 void setUp() {
-                    this.uv = new SeznamiUV();
-                    this.uv.processInput("use pv");
+                    uv.processInput("use pv");
                 }
-
+                
                 @Test
                 void getFirstThree() {
-                    assertEquals("OK", this.uv.processInput("add Test1"));
-                    assertEquals("OK", this.uv.processInput("add Test2"));
-                    assertEquals("OK", this.uv.processInput("add Test3"));
-                    assertEquals("Test3", this.uv.processInput("getFirst"));
+                    assertEquals("OK", uv.processInput("add Test1"));
+                    assertEquals("OK", uv.processInput("add Test2"));
+                    assertEquals("OK", uv.processInput("add Test3"));
+                    assertEquals("Test3", uv.processInput("getFirst"));
                 }
 
                 @Test
                 void getFirstMany() {
                     int[] numbers = {5, 10, 2, 6, 7, 1, 8, 3, 4, 9};
                     for (int i = 0; i < numbers.length; i++)
-                        assertEquals("OK", this.uv.processInput("add Test" + String.valueOf(numbers[i])));
-                    assertEquals("Test10", this.uv.processInput("getFirst"));
+                        assertEquals("OK", uv.processInput("add Test" + String.valueOf(numbers[i])));
+                    assertEquals("Test10", uv.processInput("getFirst"));
                 }
             }
 
             @Nested
             class getFirstSK {
-                SeznamiUV uv;
-
+                
                 @BeforeEach
                 void setUp() {
-                    this.uv = new SeznamiUV();
-                    this.uv.processInput("use sk");
+                    uv.processInput("use sk");
                 }
 
                 @Test
                 void getFirstThree() {
-                    assertEquals("OK", this.uv.processInput("add Test1"));
-                    assertEquals("OK", this.uv.processInput("add Test2"));
-                    assertEquals("OK", this.uv.processInput("add Test3"));
-                    assertEquals("Test3", this.uv.processInput("getFirst"));
+                    assertEquals("OK", uv.processInput("add Test1"));
+                    assertEquals("OK", uv.processInput("add Test2"));
+                    assertEquals("OK", uv.processInput("add Test3"));
+                    assertEquals("Test3", uv.processInput("getFirst"));
                 }
 
                 @Test
                 void getFirstMany() {
                     int[] numbers = {5, 10, 2, 6, 7, 1, 8, 3, 4, 9};
                     for (int i = 0; i < numbers.length; i++)
-                        assertEquals("OK", this.uv.processInput("add Test" + String.valueOf(numbers[i])));
-                    assertEquals("Test9", this.uv.processInput("getFirst"));
+                        assertEquals("OK", uv.processInput("add Test" + String.valueOf(numbers[i])));
+                    assertEquals("Test9", uv.processInput("getFirst"));
                 }
             }
 
             @Nested
             class getFirstBST {
-                SeznamiUV uv;
-
+                
                 @BeforeEach
                 void setUp() {
-                    this.uv = new SeznamiUV();
-                    this.uv.processInput("use bst");
+                    uv.processInput("use bst");
                 }
 
                 @Test
                 void getFirstThree() {
-                    assertEquals("OK", this.uv.processInput("add Test1"));
-                    assertEquals("OK", this.uv.processInput("add Test2"));
-                    assertEquals("OK", this.uv.processInput("add Test3"));
-                    assertEquals("Test1", this.uv.processInput("getFirst"));
+                    assertEquals("OK", uv.processInput("add Test1"));
+                    assertEquals("OK", uv.processInput("add Test2"));
+                    assertEquals("OK", uv.processInput("add Test3"));
+                    assertEquals("Test1", uv.processInput("getFirst"));
                 }
 
                 @Test
                 void getFirstMany() {
                     int[] numbers = {5, 10, 2, 6, 7, 1, 8, 3, 4, 9};
                     for (int i = 0; i < numbers.length; i++)
-                        assertEquals("OK", this.uv.processInput("add Test" + String.valueOf(numbers[i])));
-                    assertEquals("Test5", this.uv.processInput("getFirst"));
+                        assertEquals("OK", uv.processInput("add Test" + String.valueOf(numbers[i])));
+                    assertEquals("Test5", uv.processInput("getFirst"));
                 }
             }
 
             @Nested
             class getFirstBK {
-                SeznamiUV uv;
 
                 @BeforeEach
                 void setUp() {
-                    this.uv = new SeznamiUV();
-                    this.uv.processInput("use bk");
+                    uv.processInput("use bk");
                 }
 
                 @Test
                 void getFirstThree() {
-                    assertEquals("OK", this.uv.processInput("add Test1"));
-                    assertEquals("OK", this.uv.processInput("add Test2"));
-                    assertEquals("OK", this.uv.processInput("add Test3"));
-                    assertEquals("Test3", this.uv.processInput("getFirst"));
+                    assertEquals("OK", uv.processInput("add Test1"));
+                    assertEquals("OK", uv.processInput("add Test2"));
+                    assertEquals("OK", uv.processInput("add Test3"));
+                    assertEquals("Test3", uv.processInput("getFirst"));
                 }
 
                 @Test
                 void getFirstMany() {
                     int[] numbers = {5, 10, 2, 6, 7, 1, 8, 3, 4, 9};
                     for (int i = 0; i < numbers.length; i++)
-                        assertEquals("OK", this.uv.processInput("add Test" + String.valueOf(numbers[i])));
-                    assertEquals("Test10", this.uv.processInput("getFirst"));
+                        assertEquals("OK", uv.processInput("add Test" + String.valueOf(numbers[i])));
+                    assertEquals("Test10", uv.processInput("getFirst"));
                 }
             }
         }
@@ -413,6 +458,10 @@ class SeznamiUVTest {
             @BeforeEach
             void setUp() {
                 this.uv = new SeznamiUV();
+                this.uv.addImpl("sk", new Sklad<>());
+                this.uv.addImpl("pv", new PrioritetnaVrsta<>());
+                this.uv.addImpl("bst", new BST<>());
+                this.uv.addImpl("bk", new BinomskaKopica<>());
             }
 
             @ParameterizedTest
@@ -448,6 +497,10 @@ class SeznamiUVTest {
             @BeforeEach
             void setUp() {
                 this.uv = new SeznamiUV();
+                this.uv.addImpl("sk", new Sklad<>());
+                this.uv.addImpl("pv", new PrioritetnaVrsta<>());
+                this.uv.addImpl("bst", new BST<>());
+                this.uv.addImpl("bk", new BinomskaKopica<>());
             }
 
             @ParameterizedTest
@@ -516,6 +569,10 @@ class SeznamiUVTest {
             @BeforeEach
             void setUp() {
                 this.uv = new SeznamiUV();
+                this.uv.addImpl("sk", new Sklad<>());
+                this.uv.addImpl("pv", new PrioritetnaVrsta<>());
+                this.uv.addImpl("bst", new BST<>());
+                this.uv.addImpl("bk", new BinomskaKopica<>());
             }
 
             @ParameterizedTest
@@ -541,6 +598,10 @@ class SeznamiUVTest {
             @BeforeEach
             void setUp() {
                 this.uv = new SeznamiUV();
+                this.uv.addImpl("sk", new Sklad<>());
+                this.uv.addImpl("pv", new PrioritetnaVrsta<>());
+                this.uv.addImpl("bst", new BST<>());
+                this.uv.addImpl("bk", new BinomskaKopica<>());
             }
 
             @ParameterizedTest
@@ -595,6 +656,10 @@ class SeznamiUVTest {
             @BeforeEach
             void setUp() {
                 this.uv = new SeznamiUV();
+                this.uv.addImpl("sk", new Sklad<>());
+                this.uv.addImpl("pv", new PrioritetnaVrsta<>());
+                this.uv.addImpl("bst", new BST<>());
+                this.uv.addImpl("bk", new BinomskaKopica<>());
             }
 
             @ParameterizedTest
